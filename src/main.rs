@@ -3,12 +3,14 @@ use std::env;
 use std::error::Error;
 use std::process;
 use std::ffi::OsString;
-use std::fs::File;
 
 fn run() -> Result<(), Box<dyn Error>> {
-    let file_path = get_first_arg()?;
-    let file = File::open(file_path)?;
-    let mut rdr = csv::Reader::from_reader(file);
+    let file_path = get_first_arg()?;    
+    let mut rdr = csv::Reader::from_path(file_path)?;
+    {
+        let headers = rdr.headers()?;
+        println!("{:?}",headers);
+    }
     for result in rdr.records() {
         let record = result?;
         println!("{:?}", record);
