@@ -1,21 +1,23 @@
 extern crate csv;
+use std::error::Error;
 use std::io;
 use std::process;
 
 fn main() {
-    let mut rdr = csv::Reader::from_reader(io::stdin());
-
-    //loop over each record.
-    for result in rdr.records() {
-        // An error may occur, so abort the program in an unfriendly way.
-        // We will make this more friendly later!
-        match result {
-            Ok(record) => println!("{:?}", record),
-            Err(err) => {
-                println!("error reading csv from <stdin>: {}", err);
-                process::exit(1);
-            }
-        }
-        
+    if let Err(err) = run() {
+        println!("{}", err);
+        process::exit(1);
     }
+
+    
+   
+}
+
+fn run() -> Result<(), Box<dyn Error>>{
+    let mut rdr = csv::Reader::from_reader(io::stdin());
+    for result in rdr.records() {
+        let record = result?;
+        println!("{:?}", record);
+    }
+    Ok(())
 }
