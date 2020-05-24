@@ -11,10 +11,14 @@ fn run() -> Result<(), Box<dyn Error>> {
         let headers = rdr.headers()?;
         println!("{:?}",headers);
     }
+    let mut rowcount = 0;
     for result in rdr.records() {
-        let record = result?;
-        println!("{:?}", record);
+        // let record = result?;
+        // println!("{:?}", record);
+        rowcount+=1;
     }
+
+    println!("number of rows: {}",rowcount);
 
     Ok(())
 }
